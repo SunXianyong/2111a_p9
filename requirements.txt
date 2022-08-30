@@ -5,3 +5,8 @@ Django==4.1
 sqlparse==0.4.2
 mysqlclient==2.1.1
 geopy==2.2.0
+drf-spectacular==0.23.1
+channels==3.0.5
+python-alipay-sdk==3.0.4
+uvicorn==0.18.2
+channels-redis==3.4.1

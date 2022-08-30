@@ -1,10 +1,25 @@
+import json
+from channels.generic.websocket import WebsocketConsumer
 from django.http import HttpResponse
-from django.utils.translation import gettext_lazy
+from rest_framework import viewsets, serializers
+from rest_framework.views import APIView
+import time
+
+from app.models import User
 
 
-def hello(request):
+class UserPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
-    return HttpResponse(gettext_lazy("who is your dad ？"))
 
+class UserViewsSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserPointSerializer
 
+    def list(self, request, *args, **kwargs):
+        print(time.time(),"lai le ")
+        time.sleep(3)
+        return HttpResponse(f"{time.time()}")
 

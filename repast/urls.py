@@ -14,9 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from app.views.alipay_callback import AsyncView
 
 urlpatterns = [
+    path('doc/', include("repast.swagger")),
     path('admin/', admin.site.urls),
-    path("api/", include("app.urls")),
+    path("v1/api/", include("app.urls")),
+    path("atest", AsyncView.as_view()),
+
+    path('ws/', include('ws.urls')),
+
 ]
+
+

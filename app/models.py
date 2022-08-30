@@ -48,3 +48,38 @@ class User(models.Model):
 
     class Meta:
         db_table = "user"
+
+
+class Vegetable(models.Model):
+    name = models.CharField(max_length=32, verbose_name="菜名")
+    money = models.IntegerField(verbose_name="菜价格", default=0)
+    logo = models.CharField(max_length=1024, verbose_name="图片")
+    label = models.ForeignKey("VegetableLabel", on_delete=models.SET_NULL, db_constraint=False, null=True,
+                              related_name="vegetable")
+    merchant = models.ForeignKey("Merchant", on_delete=models.CASCADE, db_constraint=False)
+    order = models.ManyToManyField("User", related_name="order", through="Order")
+
+    class Meta:
+        # order_with_respect_to = 'label'
+        ordering = ['label']
+
+    def __str__(self):
+        return f"{self.name} {self.label.name}"
+
+
+class VegetableLabel(models.Model):
+    name = models.CharField(max_length=32, verbose_name="标签名")
+    merchant = models.ForeignKey("Merchant", on_delete=models.CASCADE, db_constraint=False,
+                                 related_name="label")
+    ord_id = models.IntegerField(default=0, unique=False)
+    combo = models.BooleanField(default=0, verbose_name="套餐")
+
+    class Meta:
+        ordering = ["-combo", "-ord_id"]
+
+
+class Order(models.Model):
+    uuid = models.IntegerField(unique=True, null=False,primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_constraint=False, related_name="vegetable")
+    vegetable = models.ForeignKey(Vegetable, related_name="user", on_delete=models.CASCADE, db_constraint=False)
+
